@@ -8,7 +8,7 @@ export default function Catalog() {
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]);
   const [category, setCategory] = useState('all');
-  const [price, setPrice] = useState(0); 
+  const [price, setPrice] = useState(0);
 
   // Fetch products from API route
   useEffect(() => {
@@ -58,6 +58,18 @@ export default function Catalog() {
     });
   };
 
+  // Reset entire cart
+  const handleResetCart = () => {
+    if (cart.length === 0) {
+      alert('Your cart is already empty.');
+      return;
+    }
+    const confirmed = confirm('Are you sure you want to clear your cart?');
+    if (confirmed) {
+      setCart([]);
+    }
+  };
+
   // Filter products
   const filteredProducts = products.filter(
     (p) =>
@@ -67,12 +79,10 @@ export default function Catalog() {
 
   return (
     <div className="catalog">
-      {/* Header Section */}
       <header className="store-header">
         <h1 className="store-title">Mini Storefront</h1>
       </header>
 
-      {/* Filters Section */}
       <div className="filters">
         <div className="filter-group">
           <label htmlFor="category">Category:</label>
@@ -104,7 +114,6 @@ export default function Catalog() {
         </div>
       </div>
 
-      {/* Product Grid */}
       <section className="product-list">
         {filteredProducts.map((product) => (
           <ProductCard
@@ -116,8 +125,27 @@ export default function Catalog() {
         ))}
       </section>
 
-      {/* Cart Section */}
-      <CartSummary cart={cart} onRemove={handleRemoveFromCart} />
+      <div className="cart-section">
+        <CartSummary cart={cart} onRemove={handleRemoveFromCart} />
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <button
+            onClick={handleResetCart}
+            className="reset-cart"
+            style={{
+              backgroundColor: '#cfc493',
+              color: '#006747',
+              border: 'none',
+              padding: '0.6rem 1rem',
+              borderRadius: '8px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              transition: 'background 0.2s ease'
+            }}
+          >
+            Reset Cart
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
